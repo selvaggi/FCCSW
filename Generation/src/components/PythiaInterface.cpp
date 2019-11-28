@@ -115,6 +115,16 @@ StatusCode PythiaInterface::initialize() {
 
 
   // --  POWHEG settings
+  
+  m_pythiaSignal->settings.addMode("POWHEG:nFinal",    2, true, false, 1, 10);
+  m_pythiaSignal->settings.addMode("POWHEG:veto",      0, true, true,  0, 2);
+  m_pythiaSignal->settings.addMode("POWHEG:vetoCount", 3, true, false, 0, 0);
+  m_pythiaSignal->settings.addMode("POWHEG:pThard",    0, true, true,  0, 2);
+  m_pythiaSignal->settings.addMode("POWHEG:pTemt",     0, true, true,  0, 2);
+  m_pythiaSignal->settings.addMode("POWHEG:emitted",   0, true, true,  0, 3);
+  m_pythiaSignal->settings.addMode("POWHEG:pTdef",     0, true, true,  0, 2);
+  m_pythiaSignal->settings.addMode("POWHEG:MPIveto",   0, true, true,  0, 1);
+  
   int vetoMode    = m_pythiaSignal->settings.mode("POWHEG:veto");
   int MPIvetoMode = m_pythiaSignal->settings.mode("POWHEG:MPIveto");
   m_doPowheg  = (vetoMode > 0 || MPIvetoMode > 0);
@@ -303,8 +313,8 @@ StatusCode PythiaInterface::getNextEvent(HepMC::GenEvent& theEvent) {
   }  // Debug
 
   if (m_doPowheg) {
-    //m_nISRveto += m_powhegHooks->getNISRveto();
-    //m_nFSRveto += m_powhegHooks->getNFSRveto();
+    m_nISRveto += m_powhegHooks->getNISRveto();
+    m_nFSRveto += m_powhegHooks->getNFSRveto();
   }
 
   if (m_printPythiaStatistics) {
